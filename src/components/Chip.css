@@ -1,0 +1,208 @@
+@keyframes shine {
+  0% { left: -100%; opacity: 0.6; }
+  20% { opacity: 1; }
+  100% { left: 200%; opacity: 0.6; }
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.25rem;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  /* Border and shadow will be controlled by theme-specific selectors */
+  will-change: transform, box-shadow, background-color;
+  transition: all 0.2s ease-in-out;
+}
+
+.chip:hover {
+  border-color: rgba(var(--accent), 0.6);
+  box-shadow: 0 0 0 1px rgba(var(--accent), 0.3),
+              0 4px 12px -1px rgba(0, 0, 0, 0.15);
+}
+
+/* Light mode text color */
+[data-theme="light"] .chip {
+  color: #111827;
+}
+
+/* Dark mode text color */
+[data-theme="dark"] .chip {
+  color: #f3f4f6;
+}
+
+.chip-text {
+  position: relative;
+  z-index: 1;
+  padding: 0.25rem 0.5rem;
+}
+
+/* Base chip styles with important flags */
+.chip {
+  border: 1.5px solid rgb(var(--accent)) !important;
+  box-shadow: 0 0 0 0.5px rgba(var(--accent), 0.5) !important;
+  outline: none !important;
+  position: relative;
+  z-index: 1;
+}
+
+/* Light mode */
+[data-theme="light"] .chip {
+  background-color: rgba(255, 255, 255, 0.9) !important;
+  color: #111827 !important;
+  border: 1.5px solid rgb(var(--accent)) !important;
+  box-shadow: 0 0 0 0.5px rgba(var(--accent), 0.5) !important;
+  transition: all 0.2s ease !important;
+  outline: none !important;
+}
+
+[data-theme="light"] .chip:hover {
+  background-color: #ffffff !important;
+  border: 1.5px solid rgb(var(--accent)) !important;
+  box-shadow: 0 0 0 1px rgba(var(--accent), 0.8),
+              0 4px 12px -1px rgba(0, 0, 0, 0.15) !important;
+  transform: translateY(-1px) !important;
+}
+
+/* Light mode shine effect */
+[data-theme="light"] .chip-shine {
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(var(--accent), 0.6),
+    transparent
+  ) !important;
+  opacity: 0.8;
+}
+
+[data-theme="light"] .chip:hover .chip-shine {
+  animation: shine 0.8s !important;
+  opacity: 1;
+}
+
+/* Dark mode */
+[data-theme="dark"] .chip {
+  background-color: rgba(17, 24, 39, 0.8) !important;
+  color: #f3f4f6 !important;
+  border: 1.5px solid rgb(var(--accent)) !important;
+  box-shadow: 0 0 0 0.5px rgba(var(--accent), 0.5) !important;
+  transition: all 0.2s ease !important;
+  outline: none !important;
+}
+
+[data-theme="dark"] .chip:hover {
+  background-color: rgba(31, 41, 55, 0.9) !important;
+  border: 1.5px solid rgb(var(--accent)) !important;
+  box-shadow: 0 0 0 1px rgba(var(--accent), 0.8),
+              0 4px 12px -1px rgba(0, 0, 0, 0.4) !important;
+  transform: translateY(-1px) !important;
+}
+
+/* Hover effects */
+.chip:hover {
+  transform: translateY(-1px);
+  border-color: rgba(var(--accent), 0.8);
+  box-shadow: 0 4px 15px -3px rgba(var(--accent), 0.2);
+}
+
+.chip:active {
+  transform: translateY(0);
+}
+
+/* Shine effect */
+.chip {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.chip:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px -3px rgba(var(--accent), 0.2);
+}
+
+/* Light mode shine effect */
+[data-theme="light"] .chip::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    var(--accent) 50%,
+    transparent 100%
+  );
+  opacity: 0.6;
+  transform: skewX(-25deg);
+  transition: 0.5s;
+  z-index: 1;
+}
+
+[data-theme="light"] .chip:hover::after {
+  left: 150%;
+  transition: 0.8s;
+}
+
+/* Dark mode shine effect (white) */
+[data-theme="dark"] .chip::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.4) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: skewX(-25deg);
+  transition: 0.5s;
+  z-index: 1;
+}
+
+[data-theme="dark"] .chip:hover::after {
+  left: 150%;
+  transition: 0.8s;
+}
+
+/* Border effect */
+.chip::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  padding: 1px;
+  background: linear-gradient(45deg, 
+    rgba(var(--accent), 0.4), 
+    rgba(var(--accent), 0.8), 
+    rgba(var(--accent), 0.4)
+  );
+  -webkit-mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.8;
+}
+
+/* Focus state */
+.chip:focus-visible {
+  outline: 2px solid rgba(var(--accent), 0.8);
+  outline-offset: 2px;
+}

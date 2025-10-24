@@ -1,68 +1,660 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
+/* Prevent overscroll and rubber-banding */
+html, body {
+  overscroll-behavior: none;
+  overflow-x: hidden;
+  height: 100%;
+  width: 100%;
   margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  padding: 0;
+  position: fixed;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
+/* For WebKit browsers (Chrome, Safari) */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(99, 102, 241, 0.5);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(99, 102, 241, 0.8);
+}
+
+/* Base dark */
+:root {
+  --bg: 10 10 10;        /* #0a0a0a */
+  --fg: 245 245 245;     /* #f5f5f5 */
+  --sub: 165 165 165;    /* #a5a5a5 */
+  --surface: 23 23 23;   /* #171717 */
+  --border: 38 38 38;    /* #262626 */
+  --accent: 99 102 241;  /* default indigo */
+}
+
+/* Light */
+[data-theme="light"] {
+  --bg: 255 255 255;
+  --fg: 17 17 17;
+  --sub: 90 90 90;
+  --surface:  248 248 248;
+  --border: 225 225 225;
+  --chip-bg: transparent;
+  --chip-text: 38 38 38;
+}
+
+/* Dark (default) */
+:root {
+  --chip-bg: 23 23 23;
+  --chip-text: 245 245 245;
+}
+
+/* Chip styles */
+.chip {
+  --tw-scale: 1;
+  --tw-translate-y: 0;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateY(var(--tw-translate-y)) scale(var(--tw-scale));
+  will-change: transform, box-shadow, border-color;
+  backface-visibility: hidden;
+  border-width: 2px;
   font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  letter-spacing: 0.02em;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
+/* Timeline styles */
+.timeline-date {
+  color: rgb(var(--sub)) !important;
+  font-size: 0.875rem !important;
+  font-weight: 500 !important;
+  left: -100px !important;
+  text-align: right !important;
+  width: 80px !important;
+}
+
+.vertical-timeline-element {
+  opacity: 0;
+  transform: scale(0.8);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.vertical-timeline-element.animate {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.timeline-line {
+  background: #3b82f6 !important; /* Bright blue for visibility */
+  width: 4px !important;
+  height: 0%;
+  border-radius: 2px;
+  box-shadow: 0 0 6px rgba(59, 130, 246, 0.8);
+  z-index: 999 !important;
+  position: absolute;
+}
+
+/* strong override so the ring always shows */
+.accented-timeline .vertical-timeline-element .vertical-timeline-element-icon {
+  background: transparent !important;
+  border: 2px solid rgb(var(--accent)) !important;
+  box-shadow: 0 0 0 6px rgb(var(--accent) / .15), 0 0 18px rgb(var(--accent) / .45) !important;
+  position: relative;
+}
+
+/* extra halo ring (works even if a theme nukes borders) */
+.accented-timeline .vertical-timeline-element .vertical-timeline-element-icon::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px rgb(var(--accent) / .4);
+  pointer-events: none;
+}
+
+/* Optional: make the icons pop on hover/focus */
+.accented-timeline .vertical-timeline-element:hover .vertical-timeline-element-icon,
+.accented-timeline .vertical-timeline-element:focus-within .vertical-timeline-element-icon {
+  transform: scale(1.05);
+  box-shadow: 0 0 0 8px rgb(var(--accent) / .18), 0 0 24px rgb(var(--accent) / .6);
+}
+
+[data-theme="light"] .shiny-text {
+  background: none;
+  -webkit-text-fill-color: #000000;
+  color: #000000;
+  text-shadow: 0 0 10px rgba(var(--accent), 0.5);
+}
+
+.chip:hover .shiny-text {
+  background-position: 100% center;
+}
+
+/* Star pulse animation */
+@keyframes pulse {
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.8;
   }
-  a:hover {
-    color: #747bff;
+  50% {
+    transform: translate(-50%, -50%) scale(1.3);
+    opacity: 0.5;
   }
-  button {
-    background-color: #f9f9f9;
+}
+
+/* Shimmer animation for gradient */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%) skewX(-15deg);
   }
+  100% {
+    transform: translateX(200%) skewX(-15deg);
+  }
+}
+
+/* Enhanced chip styles */
+.chip {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform, box-shadow;
+  backface-visibility: hidden;
+  isolation: isolate;
+}
+
+/* Border gradient effect */
+.chip::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  background: linear-gradient(
+    45deg,
+    transparent,
+    rgba(var(--accent), 0.6),
+    transparent
+  );
+  background-size: 200% 200%;
+  mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  -webkit-mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0.8;
+  z-index: 1;
+  animation: borderShine 6s linear infinite;
+}
+
+/* Light mode specific shine */
+[data-theme="light"] .chip::before {
+  background: linear-gradient(
+    45deg,
+    transparent,
+    rgba(var(--accent), 0.8),
+    transparent
+  );
+}
+
+@keyframes borderShine {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 200% 200%;
+  }
+}
+
+/* Hover effects */
+.chip:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 4px 20px -2px rgba(var(--accent), 0.2);
+}
+
+/* Active state */
+.chip:active {
+  transform: translateY(0) scale(0.98);
+  transition-duration: 0.1s;
+}
+
+/* Hover dots container */
+.chip > div:last-child {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.chip:hover > div:last-child {
+  opacity: 1;
+}
+
+/* Individual dot animation */
+.chip > div:last-child > div {
+  opacity: 0;
+  animation: fadeIn 0.3s forwards;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 0.8;
+  }
+}
+
+/* Light mode specific adjustments */
+[data-theme="light"] .chip {
+  --tw-bg-opacity: 0.03;
+  background-color: rgba(var(--accent), var(--tw-bg-opacity));
+}
+
+[data-theme="light"] .chip:hover {
+  --tw-bg-opacity: 0.08;
+  box-shadow: 0 0 20px rgba(var(--accent), 0.3);
+}
+
+/* Dark mode adjustments */
+[data-theme="dark"] .chip {
+  --tw-bg-opacity: 0.08;
+  background-color: rgba(var(--accent), var(--tw-bg-opacity));
+}
+
+[data-theme="dark"] .chip:hover {
+  --tw-bg-opacity: 0.15;
+  box-shadow: 0 0 25px rgba(var(--accent), 0.4);
+}
+
+/* HUD flicker micro-animation */
+@keyframes hud-flicker {
+  0%   { filter: brightness(0.7) contrast(1.2); }
+  35%  { filter: brightness(1.15) contrast(1.05); }
+  55%  { filter: brightness(0.9)  contrast(1.2); }
+  100% { filter: brightness(1)    contrast(1); }
+}
+.hud-flicker { animation: hud-flicker 220ms linear both; }
+
+/* Small screens: give the left gutter some visual space */
+@media (max-width: 767px) {
+  .hud-spine, .hud-progress { left: 12px !important; transform: none !important; }
+}
+
+/* Hover effects */
+.chip:hover {
+  --tw-translate-y: -1px;
+  --tw-scale: 1.02;
+  border-color: rgba(var(--accent), 0.6);
+  box-shadow: 0 0 20px rgba(var(--accent), 0.2);
+  background-color: rgba(var(--accent), 0.05);
+}
+
+.chip:active {
+  --tw-scale: 0.98;
+  transition-duration: 0.1s;
+}
+
+/* Shimmer animation */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%) skewX(-15deg);
+  }
+  100% {
+    transform: translateX(100%) skewX(-15deg);
+  }
+}
+
+/* Dark mode adjustments */
+[data-theme="dark"] .chip {
+  background-color: rgba(23, 23, 23, 0.15);
+}
+
+[data-theme="dark"] .chip:hover {
+  background-color: rgba(var(--accent), 0.08);
+  box-shadow: 0 0 25px rgba(var(--accent), 0.15);
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .chip {
+    font-size: 0.875rem;
+    padding: 0.4rem 1rem;
+  }
+  
+  .chip:hover {
+    --tw-translate-y: 0;
+    --tw-scale: 1.01;
+  }
+}
+
+/* Persona accents */
+[data-persona="sec"]   { --accent: 59 130 246; }   /* blue */
+[data-persona="dev"]   { --accent: 234 179 8; }    /* yellow */
+[data-persona="game"]  { --accent: 244 63 94; }    /* red/rose */
+[data-persona="art"]   { --accent: 34 197 94; }    /* bright green */
+
+/* Quick helpers */
+.accent-ring { @apply focus:outline-none focus:ring-2 focus:ring-[color:rgb(var(--accent))]; }
+.btn {
+  @apply inline-flex items-center gap-2 rounded-2xl px-4 py-2 border text-sm transition;
+  background: rgb(var(--surface));
+  border-color: rgb(var(--border));
+  color: rgb(var(--fg));
+}
+.btn:hover { background: color-mix(in oklab, rgb(var(--surface)) 80%, rgb(var(--accent)) 20%); }
+.badge {
+  @apply text-xs rounded-xl px-2 py-1 border;
+  color: rgb(var(--fg));
+  border-color: rgb(var(--border));
+  background: color-mix(in oklab, rgb(var(--surface)) 70%, rgb(var(--accent)) 30%);
+}
+
+/* Accent helpers */
+.text-accent    { color: rgb(var(--accent)); }
+.bg-accent      { background: rgb(var(--accent)); }
+.ring-accent    { box-shadow: 0 0 0 2px rgb(var(--accent)); }
+
+/* Persona pill buttons in the navbar */
+.pill {
+  @apply inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-sm border transition;
+  background: rgb(var(--surface));
+  border-color: rgb(var(--border));
+  color: rgb(var(--fg));
+}
+.pill:hover {
+  background: color-mix(in oklab, rgb(var(--surface)) 72%, rgb(var(--accent)) 28%);
+}
+.pill--active {
+  background: rgb(var(--accent));
+  border-color: rgb(var(--accent));
+  color: #0a0a0a; /* readable on bright accent */
+}
+
+/* ===== Glass neon border ===== */
+.glass-card {
+  position: relative;
+  border-radius: 1rem;            /* match your rounded-2xl */
+  --angle: 0deg;
+}
+
+/* The glowing ring (only the border is visible thanks to the mask) */
+.glass-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 1px;                   /* ring thickness */
+  border-radius: inherit;
+
+  /* Persona-colored conic gradient */
+  background:
+    conic-gradient(
+      from var(--angle),
+      rgb(var(--accent) / 0.85) 0%,
+      rgba(255,255,255,0.12) 15%,
+      rgb(var(--accent) / 0.25) 35%,
+      transparent 50%,
+      rgba(255,255,255,0.12) 70%,
+      rgb(var(--accent) / 0.85) 100%
+    );
+
+  /* Mask so only the 1px ring appears */
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+
+  pointer-events: none;
+  filter: drop-shadow(0 0 8px rgb(var(--accent) / 0.25));
+}
+
+@keyframes glass-spin { to { --angle: 360deg; } }
+
+/* optional: animate ring when hovered */
+.glass-card:hover::before {
+  animation: glass-spin 6s linear infinite;
+}
+
+/* Frosted panel inside */
+.glass-inner {
+  border-radius: inherit;
+  background: color-mix(in oklab, rgb(var(--surface)) 70%, rgb(var(--accent)) 30% / 6%);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgb(var(--border));
+}
+
+/* Light mode tune so it's still "glass" not gray */
+[data-theme="light"] .glass-inner {
+  background: color-mix(in oklab, rgb(255 255 255) 80%, rgb(var(--accent)) 20% / 8%);
+  border-color: #e5e7eb;
+}
+
+/* -------- Slideshow: edge-zone controls -------- */
+
+.slide-edge {
+  position: absolute; 
+  top: 0; 
+  bottom: 0; 
+  width: 34%;
+  cursor: pointer; 
+  outline: none; 
+  border: 0;
+  background: transparent; /* becomes tinted on hover */
+  transition: background 200ms ease, opacity 200ms ease;
+  opacity: 0;                /* hidden by default for clean look */
+}
+
+/* fade in zones on hover/focus of the carousel */
+.group:hover .slide-edge,
+.slide-edge:focus-visible { 
+  opacity: 1; 
+}
+
+.slide-edge--left  { left: 0; }
+.slide-edge--right { right: 0; }
+
+/* accent-tinted gradient that "dyes" the image edge when hovered */
+.slide-edge--left:hover {
+  background: linear-gradient(90deg, rgb(var(--accent) / .18), transparent 60%);
+}
+.slide-edge--right:hover {
+  background: linear-gradient(270deg, rgb(var(--accent) / .18), transparent 60%);
+}
+
+/* chevron made of CSS, sits near the edge */
+.slide-edge::after {
+  content: ""; 
+  position: absolute; 
+  top: 50%; 
+  width: 16px; 
+  height: 16px;
+  margin-top: -8px;
+  border-top: 2px solid rgb(var(--fg));
+  border-right: 2px solid rgb(var(--fg));
+  opacity: .85; 
+  transform: rotate(45deg); 
+  transition: transform 180ms ease;
+}
+
+.slide-edge--left::after  { 
+  left: 16px;  
+  transform: rotate(-135deg); 
+}
+
+.slide-edge--right::after { 
+  right: 16px; 
+  transform: rotate(45deg);  
+}
+
+.slide-edge:hover::after { 
+  transform: translateX(2px) rotate(45deg); 
+}
+
+.slide-edge--left:hover::after  { 
+  transform: translateX(-2px) rotate(-135deg); 
+}
+
+/* bottom progress bar (thin, accent) */
+.slide-progress {
+  position: absolute; 
+  left: 6%; 
+  right: 6%; 
+  bottom: 10px; 
+  height: 6px;
+  border-radius: 999px; 
+  overflow: hidden;
+  background: color-mix(in oklab, rgb(var(--surface)) 70%, rgb(var(--accent)) 30% / 12%);
+  border: 1px solid rgb(var(--border));
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.slide-progress__fill {
+  height: 100%; 
+  width: calc(100% / var(--n));
+  transform: translateX(calc(var(--i) * 100%));
+  background: rgb(var(--accent));
+  transition: transform 360ms cubic-bezier(.2,.8,.2,1);
+  will-change: transform;
+}
+
+/* Ensure the slideshow container has relative positioning */
+.aspect-video {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+}
+
+/* Image container within the slideshow */
+.aspect-video > img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ========= Accent-aware fun scrollbar ========= */
+/* Uses your CSS vars: --accent, --surface, --bg, --fg, --border */
+
+html, body, #root { height: 100%; background: rgb(var(--bg)); }
+html { scrollbar-gutter: stable both-edges; }
+
+/* ---------- Firefox ---------- */
+:root {
+  scrollbar-width: thin;
+  /* thumb color , track color (transparent) */
+  scrollbar-color:
+    color-mix(in oklab, rgb(var(--accent)) 75%, transparent)
+    transparent;
+}
+[data-theme="light"] {
+  scrollbar-color:
+    color-mix(in oklab, rgb(var(--accent)) 65%, black 0%)
+    transparent;
+}
+
+/* ---------- WebKit (Chrome/Edge/Safari) ---------- */
+::-webkit-scrollbar { width: 12px; height: 12px; }
+::-webkit-scrollbar-track { background: transparent; }
+
+/* Base thumb (fallback everywhere): sleek pill that reads the accent */
+::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  border: 3px solid transparent;      /* inner padding so it feels airy */
+  background-clip: padding-box;
+  min-height: 32px;
+  background:
+    linear-gradient(
+      to bottom,
+      color-mix(in oklab, rgb(var(--accent)) 85%, white 0%) 0%,
+      color-mix(in oklab, rgb(var(--accent)) 65%, black 0%) 100%
+    );
+  box-shadow:
+    0 0 10px rgb(var(--accent) / .35),
+    inset 0 0 0 1px color-mix(in oklab, rgb(var(--accent)) 30%, black 0%);
+  opacity: .95;
+  transition: box-shadow 160ms ease, opacity 160ms ease, background 160ms ease;
+}
+::-webkit-scrollbar-thumb:hover {
+  box-shadow:
+    0 0 14px rgb(var(--accent) / .45),
+    inset 0 0 0 1px color-mix(in oklab, rgb(var(--accent)) 50%, black 0%);
+}
+
+/* ---------- Fun shape + subtle morph (modern browsers) ---------- */
+@supports (clip-path: path("M0,0")) {
+  /* angled capsule shape */
+  ::-webkit-scrollbar-thumb {
+    clip-path: path("M8 0 H 100 C 106 12 106 36 100 48 H 8 C 2 36 2 12 8 0 Z");
+  }
+  @keyframes scrollbar-blob {
+    0%   { clip-path: path("M8 0 H 100 C 106 12 106 36 100 48 H 8 C 2 36 2 12 8 0 Z"); }
+    50%  { clip-path: path("M10 0 H 100 C 108 14 106 34 98 48 H 6 C 0 34 0 14 10 0 Z"); }
+    100% { clip-path: path("M8 0 H 100 C 106 12 106 36 100 48 H 8 C 2 36 2 12 8 0 Z"); }
+  }
+  ::-webkit-scrollbar-thumb:hover { animation: scrollbar-blob 1.4s ease-in-out infinite; }
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  ::-webkit-scrollbar-thumb:hover { animation: none; }
+}
+
+/* ---------- Optional: reuse on inner scrollable panels ---------- */
+/* Add class "fancy-scroll" to any overflow-auto container to apply the same look */
+/* Timeline pill styles */
+.timeline-pill {
+  display: flex; 
+  align-items: center; 
+  gap: 0.5rem; 
+  width: 100%;
+  padding: 0.4rem 0.7rem; 
+  border: 1px solid; 
+  border-radius: 9999px;
+  font-size: 0.85rem; 
+  line-height: 1;
+  color: rgb(var(--fg));
+  backdrop-filter: blur(6px); 
+  -webkit-backdrop-filter: blur(6px);
+  transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.timeline-pill:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0 12px rgb(var(--accent)/.25);
+}
+
+.fancy-scroll { 
+  scrollbar-width: thin; 
+  scrollbar-color: currentColor transparent; 
+}
+.fancy-scroll::-webkit-scrollbar { 
+  width: 12px; 
+  height: 12px; 
+}
+.fancy-scroll::-webkit-scrollbar-track { 
+  background: transparent; 
+}
+.fancy-scroll::-webkit-scrollbar-thumb { 
+  /* inherits all styles above */ 
 }
