@@ -1,0 +1,64 @@
+[
+  {
+    "slug": "phishnclick",
+    "title": "PhishNClick",
+    "hero_title": "PhishNClick Simulator",
+    "short_desc": "JWT-secured MERN phishing trainer on AWS ECS",
+    "long_desc": "Tracks user behavior for SOC dashboards.",
+    "metrics": [{"label":"click-through","value":"-30%"}],
+    "tags": ["MERN","Docker","AWS ECS","JWT"],
+    "kicker": "Cut risky clicks in pilot",
+    "persona": "cyber",
+    "featured": true,
+    "links": [
+      {"label": "Repo", "href": "https://github.com/your-org/phishnclick"},
+      {"label": "Case study", "href": "https://example.com/phishnclick"}
+    ]
+  },
+  {
+    "slug": "ml-threat-detection",
+    "title": "ML Threat Detection",
+    "hero_title": "ML Threat Detection",
+    "short_desc": "Random Forest on CIC-IDS-2017 to reduce SOC false positives",
+    "long_desc": "Machine learning model trained on network traffic data to identify threats with improved precision.",
+    "metrics": [{"label":"FP","value":"-15%"},{"label":"Precision","value":"+8pt"}],
+    "tags": ["Python","sklearn","CIC-IDS-2017"],
+    "kicker": "SOC-ready model",
+    "persona": "cyber",
+    "featured": false,
+    "links": [
+      {"label": "Whitepaper", "href": "https://example.com/ml-threat-detection"}
+    ]
+  },
+  {
+    "slug": "fablesmiths-website",
+    "title": "FableSmiths Website",
+    "hero_title": "FableSmiths Experience",
+    "short_desc": "React site on AWS ECS with Docker CI/CD, ALB, ACM TLS",
+    "long_desc": "Promotes UE project with optimized CDN delivery and automated deployment pipeline.",
+    "metrics": [{"label":"TTFB","value":"~120ms"}],
+    "tags": ["React","Docker","ECS","CloudFront"],
+    "kicker": "Deployed in 3 clouds",
+    "persona": "soft",
+    "featured": true,
+    "links": [
+      {"label": "Repo", "href": "https://github.com/your-org/fablesmiths"},
+      {"label": "Live", "href": "https://fablesmiths.com"}
+    ]
+  },
+  {
+    "slug": "heart-of-nightmares",
+    "title": "Heart O' Nightmares",
+    "hero_title": "Heart O' Nightmares",
+    "short_desc": "Unreal Engine 5 C++ narrative adventure with gesture-recognition spells",
+    "long_desc": "AI-driven narrative system with stylized visuals and immersive gameplay mechanics.",
+    "metrics": [{"label":"FPS","value":"60+"},{"label":"Polygons","value":"2M+"}],
+    "tags": ["Unreal Engine 5","C++","AI"],
+    "kicker": "Built for Unreal Fest",
+    "persona": "game",
+    "featured": true,
+    "links": [
+      {"label": "Trailer", "href": "https://example.com/heart-of-nightmares"}
+    ]
+  }
+]

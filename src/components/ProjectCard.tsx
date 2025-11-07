@@ -1,91 +1,84 @@
-import { motion } from "framer-motion";
-import type { Project } from "../data/projects";
-import ThumbSlideshow from "./ThumbSlideshow";
+import ProjectGallery from './ProjectGallery';
+import type { ProjectVM } from '../lib/projects';
+import { useLocation, useNavigate } from 'react-router-dom';
 
-export default function ProjectCard({ p }: { p: Project }) {
+export default function ProjectCard({ p }: { p: ProjectVM }) {
+  const navigate = useNavigate();
+  const location = useLocation();
+  function open() {
+    navigate(`/projects/${p.slug}` as any, { state: { backgroundLocation: location } });
+  }
   return (
-    <motion.article
-      whileHover={{ y: -2, scale: 1.01 }}
-      className="glass-card group h-full"
+    <article
+      className="rounded-3xl border bg-[rgb(var(--card))/60] backdrop-blur-md cursor-pointer"
+      style={{ borderColor: 'rgb(var(--border))', boxShadow: '0 10px 40px rgba(0,0,0,.35)' }}
+      onClick={open}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } }}
     >
-      <div className="glass-inner h-full p-4 flex flex-col">
-        {p.thumb && (
-          <div className="mb-3">
-            <ThumbSlideshow 
-              images={Array.isArray(p.thumb) ? p.thumb : [p.thumb]} 
-              intervalMs={4000}
-              className="shadow-[0_0_12px_rgba(var(--accent),0.25)]"
-              autoplay={Array.isArray(p.thumb) && p.thumb.length > 1}
-              showControls={Array.isArray(p.thumb) && p.thumb.length > 1}
-            />
-          </div>
-        )}
-        <header className="flex items-start justify-between gap-3">
-          <h3 className="text-lg font-semibold">{p.title}</h3>
-          {p.highlight && (
-            <span 
-              className="text-xs px-2 py-1 rounded-xl"
-              style={{ 
-                background: "color-mix(in oklab, rgb(var(--surface)) 60%, rgb(var(--accent)) 40%)" 
-              }}
+      <div className="p-4 md:p-5">
+        <ProjectGallery images={p.images} heroTitle={p.heroTitle} />
+
+        <div className="mt-4 flex items-start gap-3">
+          <h3 className="text-2xl font-semibold">{p.title}</h3>
+
+          {p.kicker && (
+            <span
+              className="ml-auto text-xs px-3 py-1 rounded-full"
+              style={{ color: 'rgb(var(--accent))', background: 'rgb(var(--accent) / .12)' }}
             >
-              {p.highlight}
+              {p.kicker}
             </span>
           )}
-        </header>
+        </div>
 
-        <p className="mt-2 text-sm flex-grow" style={{ color: "rgb(var(--fg))", opacity: 0.85 }}>
-          {p.summary}
-        </p>
+        <p className="mt-2 text-[15px] text-[rgb(var(--sub))]">{p.summary}</p>
 
-        {p.tags?.length ? (
+        {/* tech chips */}
+        {!!(p.tech_tags?.length) && (
           <div className="mt-3 flex flex-wrap gap-2">
-            {p.tags.map((tag) => (
+            {p.tech_tags!.map((t) => (
               <span
-                key={tag}
-                className="text-xs rounded-xl px-2 py-1 border"
-                style={{
-                  borderColor: "rgb(var(--border))",
-                  background: "color-mix(in oklab, rgb(var(--surface)) 80%, rgb(var(--accent)) 20%)"
-                }}
+                key={t}
+                className="px-3 py-1.5 rounded-full text-sm border"
+                style={{ borderColor: 'rgb(var(--border))', background: 'rgb(255 255 255 / .03)' }}
               >
-                {tag}
+                {t}
               </span>
             ))}
           </div>
-        ) : null}
+        )}
 
-        {p.metrics?.length ? (
-          <div className="mt-3 flex gap-3 text-xs">
-            {p.metrics.map((metric, index) => (
-              <div
-                key={`${metric.label}-${index}`}
-                className="rounded-xl px-2 py-1"
-                style={{ background: "rgba(0,0,0,.08)" }}
-              >
-                <span style={{ color: "rgb(var(--sub))" }}>{metric.label}:</span>{" "}
-                <strong>{metric.value}</strong>
-              </div>
-            ))}
+        {/* metric */}
+        {(p.metric_label || p.metric_value) && (
+          <div className="mt-3 text-sm">
+            <span className="opacity-75">
+              {p.metric_label ? `${p.metric_label.replace(/:?$/, ':')}` : ''}
+            </span>{' '}
+            <span className="font-semibold">{p.metric_value ?? ''}</span>
           </div>
-        ) : null}
+        )}
 
-        {p.links?.length ? (
-          <div className="mt-4 flex flex-wrap gap-2">
-            {p.links.map((link, index) => (
+        {/* links */}
+        {!!(p.links?.length) && (
+          <div className="mt-4 flex flex-wrap gap-3">
+            {p.links!.map((l) => (
               <a
-                key={`${link.href}-${index}`}
-                href={link.href}
+                key={l.href + l.label}
+                href={l.href}
                 target="_blank"
-                rel="noopener noreferrer"
-                className="btn text-xs"
+                rel="noreferrer"
+                className="px-4 py-2 rounded-xl border hover:opacity-90"
+                style={{ borderColor: 'rgb(var(--border))' }}
+                onClick={(e) => e.stopPropagation()}
               >
-                {link.label}
+                {l.label}
               </a>
             ))}
           </div>
-        ) : null}
+        )}
       </div>
-    </motion.article>
+    </article>
   );
 }

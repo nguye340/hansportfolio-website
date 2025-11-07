@@ -658,3 +658,32 @@ html { scrollbar-gutter: stable both-edges; }
 .fancy-scroll::-webkit-scrollbar-thumb { 
   /* inherits all styles above */ 
 }
+
+/* -------- Prose (lightweight) -------- */
+.prose-lite h1, .prose-lite h2, .prose-lite h3 { color: rgb(var(--accent)); margin: 0.75rem 0 0.25rem; font-weight: 700; }
+.prose-lite h4, .prose-lite h5, .prose-lite h6 { color: rgb(var(--fg)); margin: 0.6rem 0 0.2rem; font-weight: 600; }
+.prose-lite p { margin: 0.5rem 0; }
+.prose-lite ul { list-style: disc; padding-left: 1.25rem; margin: 0.5rem 0; }
+.prose-lite ol { list-style: decimal; padding-left: 1.25rem; margin: 0.5rem 0; }
+.prose-lite a { color: rgb(var(--accent)); text-decoration: underline; }
+.prose-lite code { background: rgb(var(--surface)); padding: 0.1rem 0.35rem; border-radius: 0.35rem; border: 1px solid rgb(var(--border)); }
+.prose-lite pre { background: rgb(var(--surface)); padding: 0.75rem; border-radius: 0.5rem; border: 1px solid rgb(var(--border)); overflow: auto; }
+.prose-lite img { max-width: 100%; height: auto; border-radius: 0.5rem; border: 1px solid rgb(var(--border)); cursor: zoom-in; }
+
+/* Embedded video wrapper used by Markdown/Prose */
+.md-embed { position: relative; width: 100%; aspect-ratio: 16/9; background: #000; border: 1px solid rgb(var(--border)); border-radius: 0.5rem; overflow: hidden; margin: 0.5rem 0; }
+.md-embed > iframe { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+/* Ensure iframes/videos fill our .aspect-video helper too */
+.aspect-video > iframe, .aspect-video > video { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+/* -------- Markdown renderer styles -------- */
+.markdown h1, .markdown h2, .markdown h3 { color: rgb(var(--accent)); margin: 0.9rem 0 0.3rem; font-weight: 700; }
+.markdown h4, .markdown h5, .markdown h6 { color: rgb(var(--fg)); margin: 0.7rem 0 0.25rem; font-weight: 600; }
+.markdown p { margin: 0.6rem 0; color: rgb(var(--sub)); }
+.markdown ul { list-style: disc; padding-left: 1.25rem; margin: 0.5rem 0; }
+.markdown ol { list-style: decimal; padding-left: 1.25rem; margin: 0.5rem 0; }
+.markdown a { color: rgb(var(--accent)); text-decoration: underline; }
+.markdown code { background: rgb(var(--surface)); padding: 0.15rem 0.35rem; border-radius: 0.35rem; border: 1px solid rgb(var(--border)); }
+.markdown pre { background: rgb(var(--surface)); padding: 0.9rem; border-radius: 0.5rem; border: 1px solid rgb(var(--border)); overflow: auto; }
+.markdown img { max-width: 100%; height: auto; border-radius: 0.5rem; border: 1px solid rgb(var(--border)); cursor: zoom-in; display: block; margin: 0.5rem 0; }

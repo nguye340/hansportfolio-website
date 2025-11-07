@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { CYBER_TIMELINE, type TimelineItem } from '../data/timeline.cyber';
+import type { Timeline as TimelineItem } from '../data/timeline';
 
 // Tiny icon set (no extra deps)
 const Icon = ({ kind }: { kind: TimelineItem['kind'] }) => {
@@ -14,7 +14,7 @@ const Icon = ({ kind }: { kind: TimelineItem['kind'] }) => {
 
 type Props = { items?: TimelineItem[] };
 
-export default function VerticalHudTimeline({ items = CYBER_TIMELINE }: Props) {
+export default function VerticalHudTimeline({ items = [] }: Props) {
   const data = useMemo(() =>
     [...items].sort((a, b) => a.start.localeCompare(b.start)).reverse(),
     [items]
@@ -44,37 +44,35 @@ export default function VerticalHudTimeline({ items = CYBER_TIMELINE }: Props) {
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: i * 0.1, duration: 0.5 }}
-            className="relative flex items-start gap-8 mb-12 last:mb-0"
+            className="relative pl-20 mb-12 last:mb-0"
           >
-            {/* Timeline dot and icon */}
-            <div className="relative flex-shrink-0">
+            {/* Icon on the rail */}
+            <div className="absolute left-8 -translate-x-1/2 top-3 z-10">
               <div
-                className="w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all duration-200 hover:scale-105"
+                className="relative w-6 h-6 rounded-full border-2 flex items-center justify-center"
                 style={{
-                  background: 'transparent',
                   borderColor: cAccent,
                   color: cAccent,
-                  boxShadow: `0 0 0 3px ${cAccent} inset, 0 0 12px ${cAccent}55`
+                  background: 'transparent'
                 }}
+                aria-hidden
               >
+                {/* bring the line visually through the icon */}
+                <div
+                  className="absolute left-1/2 -translate-x-1/2 top-[-18px] bottom-[-18px] w-0.5"
+                  style={{
+                    background: `linear-gradient(to bottom, ${cAccent} 0%, ${cAccent}70 50%, ${cAccent}50 100%)`
+                  }}
+                />
                 <Icon kind={t.kind} />
               </div>
             </div>
 
             {/* Content card */}
-            <motion.div
-              whileHover={{ scale: 1.02 }}
-              className="flex-1 min-w-0"
-              style={{ marginTop: '-8px' }}
-            >
+            <motion.div whileHover={{ scale: 1.02 }} className="flex-1 min-w-0">
               <div
                 className="rounded-xl border p-4 md:p-6 backdrop-blur-sm transition-all duration-200 hover:shadow-lg"
-                style={{
-                  background: cPanel,
-                  borderColor: cBorder,
-                  boxShadow: glow,
-                  color: cText
-                }}
+                style={{ background: cPanel, borderColor: cBorder, boxShadow: glow, color: cText }}
               >
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-3">
                   <h3 className="text-base md:text-lg font-semibold leading-tight">
@@ -84,27 +82,21 @@ export default function VerticalHudTimeline({ items = CYBER_TIMELINE }: Props) {
                     {t.date}
                   </span>
                 </div>
-
                 {t.location && (
                   <p className="text-xs md:text-sm mb-3 opacity-70" style={{ color: 'rgb(var(--sub))' }}>
                     {t.location}
                   </p>
                 )}
-
                 {t.bullets?.length ? (
                   <ul className="space-y-2 text-sm">
                     {t.bullets.map((b, j) => (
                       <li key={j} className="flex gap-2">
-                        <span
-                          className="mt-1.5 h-1.5 w-1.5 rounded-full flex-shrink-0"
-                          style={{ background: cAccent }}
-                        />
+                        <span className="mt-1.5 h-1.5 w-1.5 rounded-full flex-shrink-0" style={{ background: cAccent }} />
                         <span>{b}</span>
                       </li>
                     ))}
                   </ul>
                 ) : null}
-
                 {!!t.cta?.length && (
                   <div className="mt-4 flex gap-2 flex-wrap">
                     {t.cta.map((c) => (
@@ -112,11 +104,7 @@ export default function VerticalHudTimeline({ items = CYBER_TIMELINE }: Props) {
                         key={c.href}
                         href={c.href}
                         className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border text-sm transition-colors"
-                        style={{
-                          borderColor: cBorder,
-                          background: 'transparent',
-                          color: cText
-                        }}
+                        style={{ borderColor: cBorder, background: 'transparent', color: cText }}
                       >
                         {c.label}
                         <span className="text-xs opacity-70">↗</span>

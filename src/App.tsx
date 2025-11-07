@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { Moon, Sun } from "lucide-react";
 import ExperienceHud from "./components/ExperienceHud";
 
@@ -10,11 +10,9 @@ import { usePersona } from "./hooks/usePersona";
 import PersonaSwitch from "./components/PersonaSwitch";
 import PersonaUnderlay from "./components/PersonaUnderlay";
 import ContactChip from "./components/ContactChip";
-import ProjectGrid from "./components/ProjectGrid";
+import ProjectsGrid from "./components/ProjectsGrid";
 import BigTitle from "./components/BigTitle";
 import Chip from "./components/Chip";
-// data
-import { PROJECTS } from "./data/projects";
 
 export default function App() {
   const [persona, setPersona] = usePersona();                 // "sec" | "dev" | "game" | "art"
@@ -29,11 +27,13 @@ export default function App() {
     art: "Painterly comic style, Rive, Blender.",
   }[persona] as string;
 
-  // Filter projects by persona
-  const visibleProjects = useMemo(
-    () => PROJECTS.filter(p => p.persona.includes(persona)),
-    [persona]
-  );
+  // Map persona to Supabase persona values
+  const personaMap = {
+    sec: "cyber",
+    dev: "soft",
+    game: "game",
+    art: "art",
+  } as const;
 
 
   return (
@@ -113,10 +113,10 @@ export default function App() {
         <section>
           <h2 className="text-xl md:text-2xl font-semibold text-accent">Projects</h2>
           <TagBar />
-          <ProjectGrid items={visibleProjects} />
+          <ProjectsGrid persona={personaMap[persona]} />
         </section>
         {/* Experience Timeline */}
-        <ExperienceHud />
+        <ExperienceHud persona={personaMap[persona]} />
       </main>
 
       <Footer />
