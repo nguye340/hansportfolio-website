@@ -16,6 +16,7 @@ function toFormValues(project: Project): FormValues {
     ...project,
     narrative_md: project.narrative_md ?? "",
     star_json: project.star_json ?? ({} as any),
+    personas: (project as any).personas ?? [],
     tags_input: (project.tags ?? []).join(", "),
     metric_label_input: project.metrics?.[0]?.label ?? "",
     metric_value_input: project.metrics?.[0]?.value ?? "",
@@ -103,9 +104,14 @@ export default function ProjectEditor({ project, onClose }: { project: Project; 
     const others = (project.media_json ?? []).filter((m: any) => m?.kind !== 'video');
     const media_json = [...others, ...videos];
 
+    // Sanitize additional personas: unique, exclude primary
+    const selected: string[] = Array.isArray((rest as any).personas) ? ((rest as any).personas as string[]) : [];
+    const personas = Array.from(new Set(selected.filter((p: string) => p && p !== (rest as any).persona)));
+
     const payload: Project = {
       ...project,
       ...rest,
+      personas: personas as any,
       tags,
       metrics,
       links,
@@ -167,6 +173,29 @@ export default function ProjectEditor({ project, onClose }: { project: Project; 
               <option value="art">Art</option>
             </select>
           </label>
+
+          {/* Additional personas (appears under) */}
+          <div className="flex flex-col gap-2">
+            <span className="text-sm font-medium text-[rgb(var(--fg))]">Also show under</span>
+            <div className="grid grid-cols-2 gap-2 text-[rgb(var(--fg))]">
+              <label className="inline-flex items-center gap-2">
+                <input type="checkbox" value="cyber" {...register("personas")} defaultChecked={(project.personas ?? []).includes("cyber")} className="accent-[rgb(var(--accent))]" />
+                <span>Cyber</span>
+              </label>
+              <label className="inline-flex items-center gap-2">
+                <input type="checkbox" value="soft" {...register("personas")} defaultChecked={(project.personas ?? []).includes("soft")} className="accent-[rgb(var(--accent))]" />
+                <span>Software</span>
+              </label>
+              <label className="inline-flex items-center gap-2">
+                <input type="checkbox" value="game" {...register("personas")} defaultChecked={(project.personas ?? []).includes("game")} className="accent-[rgb(var(--accent))]" />
+                <span>Game</span>
+              </label>
+              <label className="inline-flex items-center gap-2">
+                <input type="checkbox" value="art" {...register("personas")} defaultChecked={(project.personas ?? []).includes("art")} className="accent-[rgb(var(--accent))]" />
+                <span>Art</span>
+              </label>
+            </div>
+          </div>
 
           <label className="md:col-span-2 flex flex-col gap-2">
             <span className="text-sm font-medium text-[rgb(var(--fg))]">Title</span>

@@ -1,8 +1,8 @@
 import { motion } from "framer-motion";
-import type { Project } from "../data/projects";
+import type { ProjectVM } from "../lib/projects";
 import ProjectCard from "./ProjectCard";
 
-export default function ProjectGrid({ items }: { items: Project[] }) {
+export default function ProjectGrid({ items }: { items: ProjectVM[] }) {
   return (
     <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {items.map((project, index) => (

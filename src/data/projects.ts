@@ -30,6 +30,9 @@ export const ProjectDTO = z.object({
   tags: z.array(z.string()).default([]),
   kicker: z.string().optional().nullable(),
   persona: z.enum(["cyber","soft","game","art"]),
+  personas: z.array(z.enum(["cyber","soft","game","art"]))
+    .nullish()
+    .default([]),
   featured: z.boolean().default(false),
   created_at: z.string().optional(),
   updated_at: z.string().optional(),
@@ -54,13 +57,15 @@ export const ProjectUpsertDTO = ProjectDTO.omit({ project_images: true });
 
 export async function listProjects(opts?: { persona?: Project["persona"]; tag?: string; featured?: boolean }) {
   let q = supabase.from("projects").select("*").order("updated_at", { ascending: false });
-  if (opts?.persona) q = q.eq("persona", opts.persona);
   if (opts?.featured) q = q.eq("featured", true);
   const { data, error } = await q;
   if (error) throw error;
   const rows = (data ?? []) as any[];
+  const personaFiltered = opts?.persona
+    ? rows.filter(r => r?.persona === opts.persona || (Array.isArray(r?.personas) && r.personas.includes(opts.persona)))
+    : rows;
   // Fetch images separately to avoid relationship dependency
-  const ids = rows.map(r => r.id).filter(Boolean);
+  const ids = personaFiltered.map((r: any) => r.id).filter(Boolean);
   let imagesByProject: Record<string, any[]> = {};
   if (ids.length) {
     const { data: imgs, error: imgErr } = await supabase
@@ -73,7 +78,7 @@ export async function listProjects(opts?: { persona?: Project["persona"]; tag?: 
       imagesByProject[im.project_id].push(im);
     }
   }
-  const withImgs = rows.map(r => ({ ...r, project_images: imagesByProject[r.id] ?? [] }));
+  const withImgs = personaFiltered.map((r: any) => ({ ...r, project_images: imagesByProject[r.id] ?? [] }));
   // Client-side tag filter (RLS keeps it simple):
   const filtered = opts?.tag ? withImgs.filter(p => (p.tags ?? []).includes(opts.tag!)) : withImgs;
   return filtered.map(p => ProjectDTO.parse(p)) as Project[];
@@ -100,7 +105,7 @@ export async function upsertProject(input: Project) {
   const { project_images, ...rest } = input as any;
   const valid = ProjectUpsertDTO.parse(rest);
   const baseCols = [
-    "id","slug","title","short_desc","long_desc","narrative_md","metrics","tags","persona","featured","created_at","updated_at","hero_title","kicker","links","star_json","media_json"
+    "id","slug","title","short_desc","long_desc","narrative_md","metrics","tags","persona","personas","featured","created_at","updated_at","hero_title","kicker","links","star_json","media_json"
   ].join(",");
   const { data, error } = await supabase
     .from("projects")

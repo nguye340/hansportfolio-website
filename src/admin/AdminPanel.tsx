@@ -5,12 +5,13 @@ import type { Project } from "../data/projects";
 import ProjectEditor from "./ProjectEditor";
 import ProjectImagesPanel from "./ProjectImagesPanel";
 import { listTimeline, deleteTimelineItem, type Timeline } from "../data/timeline";
+import GalleryPanel from "./GalleryPanel";
 import TimelineEditor from "./TimelineEditor";
 
 type EditableProject = Project & { project_images?: { storage_path: string }[] };
 
 export default function AdminPanel() {
-  const [tab, setTab] = useState<"projects" | "timeline">("projects");
+  const [tab, setTab] = useState<"projects" | "timeline" | "gallery">("projects");
   const [items, setItems] = useState<Project[]>([]);
   const [editing, setEditing] = useState<EditableProject | null>(null);
   const [managingImages, setManagingImages] = useState<string | null>(null);
@@ -44,6 +45,11 @@ export default function AdminPanel() {
               style={{ borderColor: 'rgb(var(--border))' }}
               onClick={() => setTab('timeline')}
             >Timeline</button>
+            <button
+              className={`px-3 py-1.5 rounded border ${tab === 'gallery' ? 'bg-[rgb(var(--accent))] text-black' : 'text-[rgb(var(--fg))]'}`}
+              style={{ borderColor: 'rgb(var(--border))' }}
+              onClick={() => setTab('gallery')}
+            >Gallery</button>
           </div>
           <select 
             className="border border-[rgb(var(--border))] rounded px-3 py-2 bg-[rgb(var(--surface))] text-[rgb(var(--fg))]" 
@@ -60,18 +66,20 @@ export default function AdminPanel() {
             <button
               className="ml-auto px-4 py-2 rounded-lg bg-[rgb(var(--accent))] text-white font-medium hover:opacity-90 transition"
               onClick={() =>
-                setEditing({ slug: "", title: "", short_desc: "", persona: "cyber", metrics: [], tags: [], featured: false, links: [] } as any)
+                setEditing({ slug: "", title: "", short_desc: "", persona: "cyber", personas: [], metrics: [], tags: [], featured: false, links: [] } as any)
               }
             >
               + New Project
             </button>
-          ) : (
+          ) : tab === 'timeline' ? (
             <button
               className="ml-auto px-4 py-2 rounded-lg bg-[rgb(var(--accent))] text-white font-medium hover:opacity-90 transition"
               onClick={() => setEditingTimeline({ persona: (persona === 'all' ? 'cyber' : (persona as any)), kind: 'work', start: '', date: '', title: '' } as any)}
             >
               + New Timeline Item
             </button>
+          ) : (
+            <div className="ml-auto text-sm opacity-70">Manage game galleries below</div>
           )}
 
       {editingTimeline && (
@@ -116,7 +124,7 @@ export default function AdminPanel() {
                       <td className="px-4 py-3 text-[rgb(var(--fg))]">{p.title}</td>
                       <td className="px-4 py-3 text-[rgb(var(--fg))]">
                         <span className="px-2 py-1 rounded-full text-xs bg-[rgb(var(--accent))]/10 text-[rgb(var(--accent))]">
-                          {p.persona}
+                          {[p.persona, ...((p as any).personas ?? [])].join(', ')}
                         </span>
                       </td>
                       <td className="px-4 py-3 text-[rgb(var(--sub))]">{(p.tags ?? []).join(", ")}</td>
@@ -147,7 +155,7 @@ export default function AdminPanel() {
               </tbody>
             </table>
           </div>
-        ) : (
+        ) : tab === 'timeline' ? (
           <div className="overflow-x-auto rounded-xl border border-[rgb(var(--border))] bg-[rgb(var(--surface))]">
             <table className="w-full text-sm">
               <thead className="text-left border-b border-[rgb(var(--border))]">
@@ -192,6 +200,10 @@ export default function AdminPanel() {
                 )}
               </tbody>
             </table>
+          </div>
+        ) : (
+          <div className="rounded-xl border border-[rgb(var(--border))] bg-[rgb(var(--surface))]">
+            <GalleryPanel persona={'game'} />
           </div>
         )}
       </div>

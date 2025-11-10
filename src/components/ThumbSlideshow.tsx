@@ -29,7 +29,6 @@ export default function ThumbSlideshow({
 
   const next = useCallback(() => setI((v) => clamp(v + 1)), [clamp]);
   const prev = useCallback(() => setI((v) => clamp(v - 1)), [clamp]);
-  const goTo = useCallback((idx: number) => setI(clamp(idx)), [clamp]);
 
   const stop = useCallback(() => {
     if (timer.current) {

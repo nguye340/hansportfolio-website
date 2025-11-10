@@ -1,4 +1,4 @@
-import type { CSSProperties, ReactNode, ComponentType, ElementType } from 'react';
+import type { CSSProperties, ReactNode, ElementType } from 'react';
 import { forwardRef } from 'react';
 import './StarBorder.css';
 

@@ -4,7 +4,7 @@ import gsap from "gsap";
 export default function BigTitle({ text }: { text: string }) {
   const ref = useRef<HTMLDivElement>(null);
 
-  const letters = useMemo(() => text.split(""), [text]);
+  const words = useMemo(() => text.split(" "), [text]);
 
   useEffect(() => {
     if (!ref.current) return;
@@ -26,18 +26,23 @@ export default function BigTitle({ text }: { text: string }) {
   }, [text]);
 
   return (
-    <div ref={ref} className="select-none leading-none tracking-tight">
-      {letters.map((ch, i) => (
-        <span 
-          key={i} 
-          className="lt inline-block will-change-transform"
-          style={{ 
-            color: "rgb(var(--accent))", 
-            fontWeight: 800, 
-            fontSize: "clamp(32px, 8vw, 96px)" 
-          }}
-        >
-          {ch === " " ? "\u00A0" : ch}
+    <div ref={ref} className="select-none leading-[0.95] tracking-tight break-normal">
+      {words.map((w, wi) => (
+        <span key={wi} className="inline-block whitespace-nowrap align-bottom">
+          {w.split("").map((ch, i) => (
+            <span
+              key={i}
+              className="lt inline-block will-change-transform"
+              style={{
+                color: "rgb(var(--accent))",
+                fontWeight: 800,
+                fontSize: "clamp(32px, 8vw, 96px)",
+              }}
+            >
+              {ch}
+            </span>
+          ))}
+          {wi < words.length - 1 ? <span>{" "}</span> : null}
         </span>
       ))}
     </div>

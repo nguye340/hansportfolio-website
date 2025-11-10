@@ -8,5 +8,10 @@ export const supabase = createClient(
 
 // Node-only helper (for seed scripts). Do NOT import in browser code.
 export function createServerClient(serviceKey: string) {
-  return createClient(process.env.VITE_SUPABASE_URL as string, serviceKey);
+  const nodeProcess = typeof globalThis !== 'undefined' ? (globalThis as any).process : undefined;
+  const url = nodeProcess?.env?.VITE_SUPABASE_URL;
+  if (!url) {
+    throw new Error('VITE_SUPABASE_URL must be set in the Node environment.');
+  }
+  return createClient(url, serviceKey);
 }
