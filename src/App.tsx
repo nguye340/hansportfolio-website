@@ -377,12 +377,27 @@ export default function App() {
 
 
   return (
-    <div className="min-h-screen flex flex-col relative bg-[rgb(var(--bg))] text-[rgb(var(--fg))]">
+    <div className="min-h-screen w-screen flex flex-col relative bg-[rgb(var(--bg))] text-[rgb(var(--fg))] overflow-x-hidden" style={{ overflowY: 'auto' }}>
       {/* Background layer with animated underlay */}
-      <PersonaUnderlay persona={persona} />
+      <div style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        width: '100vw',
+        height: '100vh',
+        zIndex: 0,
+        overflow: 'hidden',
+        margin: 0,
+        padding: 0,
+        pointerEvents: 'none'
+      }}>
+        <PersonaUnderlay persona={persona} />
+      </div>
 
       {/* Content wrapper with z-index to appear above the underlay */}
-      <div className="relative z-10 flex-1 flex flex-col">
+      <div className="relative z-10 flex-1 flex flex-col w-full" style={{ position: 'relative', minHeight: '100vh' }}>
         {/* Header */}
       <header className={`sticky top-0 z-40 border-b border-[rgb(var(--border))] ${mode === 'dark' ? 'bg-[rgb(var(--surface))]/80' : 'bg-white'} backdrop-blur`}>
         <div className="mx-auto max-w-6xl px-4 py-3 flex items-center gap-3">

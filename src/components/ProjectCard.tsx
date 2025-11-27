@@ -10,14 +10,14 @@ export default function ProjectCard({ p }: { p: ProjectVM }) {
   }
   return (
     <article
-      className="rounded-3xl border bg-[rgb(var(--card))/60] backdrop-blur-md cursor-pointer"
+      className="rounded-3xl border bg-[rgb(var(--card))/98] backdrop-blur-sm cursor-pointer relative z-20 shadow-2xl shadow-black/40"
       style={{ borderColor: 'rgb(var(--border))', boxShadow: '0 10px 40px rgba(0,0,0,.35)' }}
       onClick={open}
       role="button"
       tabIndex={0}
       onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } }}
     >
-      <div className="p-4 md:p-5">
+      <div className="p-4 md:p-5 relative z-20">
         <ProjectGallery images={p.images} heroTitle={p.heroTitle} />
 
         <div className="mt-4 flex items-start gap-3">
@@ -33,7 +33,7 @@ export default function ProjectCard({ p }: { p: ProjectVM }) {
           )}
         </div>
 
-        <p className="mt-2 text-[15px] text-[rgb(var(--sub))]">{p.summary}</p>
+        <p className="mt-2 text-[15px] text-[rgb(var(--fg))] opacity-95">{p.summary}</p>
 
         {/* tech chips */}
         {!!(p.tech_tags?.length) && (
@@ -42,7 +42,7 @@ export default function ProjectCard({ p }: { p: ProjectVM }) {
               <span
                 key={t}
                 className="px-3 py-1.5 rounded-full text-sm border"
-                style={{ borderColor: 'rgb(var(--border))', background: 'rgb(255 255 255 / .03)' }}
+                style={{ borderColor: 'rgb(var(--border))', background: 'rgb(255 255 255 / .1)' }}
               >
                 {t}
               </span>

@@ -322,173 +322,71 @@ export default function PersonaUnderlay({ persona }: { persona: Persona }) {
         ease: "power2.inOut",
         onComplete: () => transitionOverlay.remove()
       });
-      // DEV — Playful coding elements with interactive animations
-      
-      // Grid system for better element distribution
-      const gridSize = 6;
+
+      // Subtle grid pattern
+      const gridSize = 8;
       const cellSize = 100 / gridSize;
-      const usedPositions = new Set();
       
-      // Code brackets that bounce in with better distribution
-      for (let i = 0; i < 12; i++) {
-        // Find a unique position on the grid
-        let x, y, posKey;
-        do {
-          x = Math.floor(gsap.utils.random(0, gridSize)) * cellSize + cellSize/2;
-          y = Math.floor(gsap.utils.random(0, gridSize)) * cellSize + cellSize/2;
-          posKey = `${Math.round(x)}_${Math.round(y)}`;
-        } while (usedPositions.has(posKey));
-        
-        usedPositions.add(posKey);
-        
-        // Add some randomness to the position
-        x += gsap.utils.random(-cellSize/3, cellSize/3);
-        y += gsap.utils.random(-cellSize/3, cellSize/3);
-        
-        const bracket = make("u-bracket", {
-          position: "absolute",
-          color: tint[0],
-          fontSize: `${gsap.utils.random(20, 50)}px`,
-          opacity: "0",
-          left: `${x}%`,
-          top: `${y}%`,
-          zIndex: "1",
-          pointerEvents: "none",
-          textShadow: `0 0 10px ${tint[0]}80`,
-          filter: `blur(${gsap.utils.random(0, 1)}px)`
-        });
-        
-        bracket.textContent = Math.random() > 0.5 ? "{" : "}";
-        
-        // Animate brackets with different delays and movements
-        gsap.to(bracket, {
-          opacity: gsap.utils.random(0.2, 0.7),
-          y: gsap.utils.random(-30, 30),
-          x: gsap.utils.random(-15, 15),
-          rotation: gsap.utils.random(-15, 15),
-          duration: gsap.utils.random(3, 6),
-          delay: i * 0.1,
-          ease: "sine.inOut",
-          yoyo: true,
-          repeat: -1
-        });
-      }
-      
-      // Enhanced code snippets with more variety and animations
-      const codeSnippets = [
-        { 
-          text: "function greet(name) {\n  return `Hello, ${name}!`;\n}", 
-          color: tint[0],
-          language: "javascript"
-        },
-        { 
-          text: "const dev = {\n  name: 'Developer',\n  skills: ['JS', 'TS', 'React', 'Node']\n};", 
-          color: tint[1],
-          language: "javascript"
-        },
-        { 
-          text: "<Button \n  onClick={handleClick}\n  variant='primary'\n>\n  Click Me!\n</Button>", 
-          color: tint[0],
-          language: "jsx"
-        },
-        { 
-          text: "import React, { useState } from 'react';\n\nconst Counter = () => {\n  const [count, setCount] = useState(0);\n  return (\n    <div>\n      <p>Count: {count}</p>\n      <button onClick={() => setCount(c => c + 1)}>\n        Increment\n      </button>\n    </div>\n  );\n};", 
-          color: tint[1],
-          language: "jsx"
-        },
-        {
-          text: "// Custom hook example\nfunction useLocalStorage(key, initialValue) {\n  const [stored, setStored] = useState(() => {\n    try {\n      const item = window.localStorage.getItem(key);\n      return item ? JSON.parse(item) : initialValue;\n    } catch (error) {\n      console.error(error);\n      return initialValue;\n    }\n  });\n\n  const setValue = (value) => {\n    try {\n      const valueToStore = value instanceof Function ? value(stored) : value;\n      setStored(valueToStore);\n      window.localStorage.setItem(key, JSON.stringify(valueToStore));\n    } catch (error) {\n      console.error(error);\n    }\n  };\n\n  return [stored, setValue];\n}",
-          color: tint[0],
-          language: "javascript"
+      // Create a subtle grid of dots
+      for (let y = 0; y < gridSize; y++) {
+        for (let x = 0; x < gridSize; x++) {
+          make("u-grid-dot", {
+            position: "absolute",
+            width: "2px",
+            height: "2px",
+            borderRadius: "50%",
+            background: `rgba(234, 179, 8, 0.2)`,
+            left: `${x * cellSize + cellSize/2}%`,
+            top: `${y * cellSize + cellSize/2}%`,
+            transform: "translate(-50%, -50%)",
+            pointerEvents: "none"
+          });
         }
+      }
+
+      // Create simple geometric shapes with subtle movement
+      const shapes = [
+        { type: 'circle', size: 150, color: 'rgba(234, 179, 8, 0.1)' },
+        { type: 'square', size: 120, color: 'rgba(234, 179, 8, 0.08)' },
+        { type: 'triangle', size: 180, color: 'rgba(234, 179, 8, 0.05)' }
       ];
-      
-      // Create floating code blocks with animations
-      for (let i = 0; i < 6; i++) {
-        const snippet = codeSnippets[Math.floor(Math.random() * codeSnippets.length)];
-        const sizeScale = gsap.utils.random(0.8, 1.2);
-        
-        const code = make("u-code", {
-          position: "absolute",
-          background: `rgba(${snippet.color.substring(4, snippet.color.length-1)}, 0.1)`,
-          color: snippet.color,
-          padding: "12px 16px",
-          borderRadius: "8px",
-          fontFamily: '"Fira Code", "Courier New", monospace',
-          fontSize: `${12 * sizeScale}px`,
-          lineHeight: "1.5",
-          whiteSpace: "pre",
-          left: `${gsap.utils.random(5, 65)}%`,
-          top: `${gsap.utils.random(5, 65)}%`,
-          zIndex: "2",
-          opacity: "0",
-          transform: "scale(0.95) rotate(0.5deg)",
-          backdropFilter: "blur(4px)",
-          border: `1px solid ${snippet.color}33`,
-          boxShadow: `0 4px 20px ${snippet.color}15`,
-          maxWidth: "300px",
-          overflow: "hidden",
-          transition: "all 0.3s ease"
+
+      shapes.forEach((shape, i) => {
+        const shapeEl = make(`u-shape-${i}`, {
+          position: 'absolute',
+          width: `${shape.size}px`,
+          height: `${shape.size}px`,
+          background: shape.color,
+          left: `${gsap.utils.random(10, 90)}%`,
+          top: `${gsap.utils.random(10, 90)}%`,
+          opacity: '0',
+          pointerEvents: 'none',
+          borderRadius: shape.type === 'circle' ? '50%' : '4px',
+          clipPath: shape.type === 'triangle' ? 'polygon(50% 0%, 0% 100%, 100% 100%)' : 'none',
+          transform: 'scale(0.8) rotate(0deg)'
         });
-        
-        // Add language label
-        const langLabel = document.createElement('div');
-        langLabel.textContent = snippet.language;
-        langLabel.style.position = 'absolute';
-        langLabel.style.top = '4px';
-        langLabel.style.right = '8px';
-        langLabel.style.fontSize = '10px';
-        langLabel.style.opacity = '0.6';
-        langLabel.style.textTransform = 'uppercase';
-        langLabel.style.letterSpacing = '1px';
-        code.appendChild(langLabel);
-        
-        // Add code content
-        const codeContent = document.createElement('div');
-        codeContent.textContent = snippet.text;
-        codeContent.style.marginTop = '12px';
-        code.appendChild(codeContent);
-        
-        // Add hover effect
-        code.addEventListener('mouseenter', () => {
-          gsap.to(code, {
-            scale: 1.05,
-            boxShadow: `0 8px 30px ${snippet.color}30`,
-            zIndex: 10,
-            duration: 0.3
-          });
-        });
-        
-        code.addEventListener('mouseleave', () => {
-          gsap.to(code, {
-            scale: 1,
-            boxShadow: `0 4px 20px ${snippet.color}15`,
-            zIndex: 2,
-            duration: 0.3
-          });
-        });
-        
-        // Animate code blocks in
-        gsap.to(code, {
-          opacity: gsap.utils.random(0.7, 0.9),
+
+        // Animate shapes in
+        gsap.to(shapeEl, {
+          opacity: 1,
           scale: 1,
-          rotation: gsap.utils.random(-2, 2),
-          duration: 0.7,
-          delay: i * 0.15,
-          ease: "back.out(1.7)"
+          rotation: gsap.utils.random(-10, 10),
+          duration: 1.5,
+          delay: i * 0.3,
+          ease: 'power2.out'
         });
-        
-        // Add floating animation
-        gsap.to(code, {
-          y: gsap.utils.random(-20, 20),
-          x: gsap.utils.random(-15, 15),
-          rotation: gsap.utils.random(-1, 1),
-          duration: gsap.utils.random(4, 8),
+
+        // Add subtle floating animation
+        gsap.to(shapeEl, {
+          y: gsap.utils.random(-30, 30),
+          x: gsap.utils.random(-20, 20),
+          rotation: gsap.utils.random(-5, 5),
+          duration: gsap.utils.random(8, 12),
           yoyo: true,
           repeat: -1,
-          ease: "sine.inOut"
+          ease: 'sine.inOut'
         });
-      }
+      });
 
       // Light mode adjustments
       const lightModeStyles = document.createElement('style');
@@ -1465,11 +1363,21 @@ export default function PersonaUnderlay({ persona }: { persona: Persona }) {
   return (
     <div
       ref={root}
-      className="fixed inset-0 z-0 pointer-events-none overflow-hidden"
-      aria-hidden
       style={{
-        background: `radial-gradient(1200px 800px at 18% 18%, ${tint[0]}, transparent 60%),
-                   radial-gradient(1200px 800px at 82% 82%, ${tint[1]}, transparent 60%)`,
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        width: '100vw',
+        height: '100vh',
+        overflow: 'hidden',
+        zIndex: 0,
+        margin: 0,
+        padding: 0,
+        pointerEvents: 'none',
+        contain: 'layout paint',
+        transform: 'translateZ(0)'
       }}
     />
   );

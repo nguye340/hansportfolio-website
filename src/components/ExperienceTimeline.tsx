@@ -24,20 +24,20 @@ export default function ExperienceTimeline({ items }: { items: Row[] }) {
   }, []);
 
   return (
-    <section ref={root} className="mt-8">
+    <section ref={root} className="mt-12 relative z-30">
       <h2 className="text-xl md:text-2xl font-semibold">Experience</h2>
       <div className="relative mt-3">
         <div className="absolute left-4 top-0 bottom-0 w-px bg-neutral-700" />
         <div className="space-y-4 pl-10">
           {items.map((r, i) => (
-            <div key={i} className="tl-card rounded-2xl border border-neutral-800 bg-neutral-900 p-4">
+            <div key={i} className="tl-card rounded-2xl border border-neutral-500/40 bg-neutral-900/98 p-4 backdrop-blur-sm shadow-xl shadow-black/40 relative z-30">
               <div className="flex items-center gap-3">
-                <span className="tl-pin h-2.5 w-2.5 rounded-full bg-indigo-400" />
-                <div className="font-medium">{r.role}</div>
-                <div className="ml-auto text-sm text-neutral-400">{r.when}</div>
+                <span className="tl-pin h-2.5 w-2.5 rounded-full bg-indigo-400 flex-shrink-0" />
+                <div className="font-semibold text-lg">{r.role}</div>
+                <div className="ml-auto text-sm text-neutral-300 bg-neutral-800/80 px-3 py-1 rounded-full">{r.when}</div>
               </div>
-              <div className="text-sm text-neutral-300">{r.where}</div>
-              <ul className="mt-2 text-sm list-disc pl-5 text-neutral-300">
+              <div className="text-sm text-neutral-200 font-medium mt-1.5 mb-2 opacity-90">{r.where}</div>
+              <ul className="mt-3 text-sm list-disc pl-5 text-neutral-100 space-y-2.5">
                 {r.points.map((pt, j) => <li key={j}>{pt}</li>)}
               </ul>
             </div>
