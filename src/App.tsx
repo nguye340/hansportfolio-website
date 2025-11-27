@@ -399,19 +399,22 @@ export default function App() {
       {/* Content wrapper with z-index to appear above the underlay */}
       <div className="relative z-10 flex-1 flex flex-col w-full" style={{ position: 'relative', minHeight: '100vh' }}>
         {/* Header */}
-      <header className={`sticky top-0 z-40 border-b border-[rgb(var(--border))] ${mode === 'dark' ? 'bg-[rgb(var(--surface))]/80' : 'bg-white'} backdrop-blur`}>
-        <div className="mx-auto max-w-6xl px-4 py-3 flex items-center gap-3">
+      <header className={`sticky top-0 z-40 border-b ${mode === 'dark' ? 'border-white/5' : 'border-gray-100/20'} bg-transparent backdrop-blur-md transition-colors duration-300`}>
+        <div className="mx-auto max-w-6xl px-4 py-2.5 flex items-center gap-3">
           <button
             onClick={() => setShowProfile(true)}
-            className="flex items-center gap-2 font-semibold rounded-full px-2 py-1 transition hover:bg-[rgb(var(--surface))]/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--accent))]"
+            className="flex items-center gap-2.5 font-medium rounded-lg px-2.5 py-1.5 transition-all duration-200 hover:bg-[rgb(var(--accent))]/5 hover:scale-[1.02] focus:outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--accent))]/30"
           >
-            <img
-              src={persona === 'sec' || persona === 'dev' ? PERSONA_PROFILES.sec.img : PERSONA_PROFILES.art.img}
-              alt="Portrait of Han T. Nguyen"
-              className="h-8 w-8 rounded-full object-cover border border-white/20"
-              draggable={false}
-            />
-            <span>Han T. Nguyen</span>
+            <div className="relative">
+              <img
+                src={persona === 'sec' || persona === 'dev' ? PERSONA_PROFILES.sec.img : PERSONA_PROFILES.art.img}
+                alt="Portrait of Han T. Nguyen"
+                className="h-8 w-8 rounded-lg object-cover border border-white/10"
+                draggable={false}
+              />
+              <div className="absolute -bottom-1 -right-1 w-3 h-3 rounded-full border-2 border-[rgb(var(--surface))]" style={{ background: 'rgb(var(--accent))' }} />
+            </div>
+            <span className="text-[15px] font-medium" style={{ color: 'rgb(var(--fg))' }}>Han T. Nguyen</span>
           </button>
 
           <div className="ml-auto flex items-center gap-2">

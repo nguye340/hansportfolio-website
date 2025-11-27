@@ -579,75 +579,55 @@ export default function PersonaUnderlay({ persona }: { persona: Persona }) {
         });
       }
       
-      // Speed lines with varied thickness and length
-      const speedLineCount = 15; // Increased number of speed lines
+      // Speed lines - minimal and clean
+      const speedLineCount = 2; // Only 2 lines for subtle effect
       for (let i = 0; i < speedLineCount; i++) {
-        const thickness = gsap.utils.random(1, 4); // Varied thickness
-        const length = gsap.utils.random(20, 50); // Varied length
-        const opacity = gsap.utils.random(0.2, 0.6); // Varied opacity
-        const speed = gsap.utils.random(2, 6); // Varied animation speed
+        const thickness = gsap.utils.random(1, 2); // Thinner lines
+        const length = gsap.utils.random(40, 50); // Longer lines
+        const opacity = gsap.utils.random(0.08, 0.2); // More subtle opacity
+        const speed = gsap.utils.random(6, 10); // Faster movement
+        const yPos = 15 + (i * (70 / (speedLineCount - 1 || 1))); // Evenly spaced vertically with margins
+        
+        // Create a container to ensure perfect horizontal alignment
+        const lineContainer = make("speed-line-container", {
+          position: "fixed",
+          left: '0',
+          top: `${yPos}%`,
+          width: '100vw',
+          height: `${thickness}px`,
+          overflow: 'hidden',
+          zIndex: '1',
+          pointerEvents: 'none',
+          transform: 'none',
+          willChange: 'transform'
+        });
         
         const speedLine = make("u-speed", {
           position: "absolute",
           width: `${length}vw`,
-          height: `${thickness}px`, // Dynamic thickness
-          left: `${gsap.utils.random(-30, 30)}%`,
-          top: `${gsap.utils.random(5, 95)}%`,
+          height: '100%',
+          left: '0',
+          top: '0',
           background: `linear-gradient(90deg, 
             ${tint[0]}${Math.floor(opacity * 255).toString(16).padStart(2, '0')}, 
-            transparent)`,
+            transparent 80%)`,
           transform: 'translateX(-100%)',
-          zIndex: "1"
+          transformOrigin: 'left center',
+          willChange: 'transform',
+          pointerEvents: 'none'
         });
         
-        // Animate speed lines with varied delays and speeds
+        // Add the line to its container
+        lineContainer.appendChild(speedLine);
+        
+        // Animate speed lines with staggered delays
         gsap.to(speedLine, {
-          x: '100vw',
+          x: '150vw',
           duration: speed,
           repeat: -1,
           ease: 'none',
-          delay: gsap.utils.random(0, 3)
-        });
-      }
-      
-      // Power-up orbs
-      for (let i = 0; i < 8; i++) {
-        const size = gsap.utils.random(15, 35);
-        const duration = gsap.utils.random(3, 6);
-        const delay = gsap.utils.random(0, 2);
-        
-        const orb = make("u-orb", {
-          position: "absolute",
-          width: `${size}px`,
-          height: `${size}px`,
-          left: `${gsap.utils.random(5, 95)}%`,
-          top: `${gsap.utils.random(5, 95)}%`,
-          borderRadius: "50%",
-          background: `radial-gradient(circle at 30% 30%, ${tint[0]}, ${tint[1]})`,
-          boxShadow: `0 0 15px ${tint[0]}`,
-          opacity: "0.8",
-          zIndex: "2"
-        });
-        
-        // Add pulsing animation to orbs
-        gsap.to(orb, {
-          scale: 1.2,
-          duration: duration / 2,
-          yoyo: true,
-          repeat: -1,
-          ease: "sine.inOut",
-          delay: delay
-        });
-        
-        // Add subtle floating animation
-        gsap.to(orb, {
-          y: `+=${gsap.utils.random(-20, 20)}`,
-          x: `+=${gsap.utils.random(-15, 15)}`,
-          duration: gsap.utils.random(3, 6),
-          yoyo: true,
-          repeat: -1,
-          ease: "sine.inOut",
-          delay: delay
+          delay: i * 1.2, // Stagger the start times more
+          repeatDelay: gsap.utils.random(1, 3) // Random delay between repeats
         });
       }
       

@@ -37,12 +37,19 @@ export default function ProjectCard({ p }: { p: ProjectVM }) {
 
         {/* tech chips */}
         {!!(p.tech_tags?.length) && (
-          <div className="mt-3 flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2 mt-3">
             {p.tech_tags!.map((t) => (
               <span
                 key={t}
-                className="px-3 py-1.5 rounded-full text-sm border"
-                style={{ borderColor: 'rgb(var(--border))', background: 'rgb(255 255 255 / .1)' }}
+                className="px-2 py-0.5 rounded-md text-xs font-normal transition-all duration-200 hover:scale-105"
+                style={{
+                  border: '1px solid rgba(var(--accent), 0.08)',
+                  background: 'rgba(var(--accent), 0.02)',
+                  color: 'rgba(var(--fg), 0.7)',
+                  backdropFilter: 'blur(6px)',
+                  fontWeight: 400,
+                  letterSpacing: '0.01em'
+                }}
               >
                 {t}
               </span>

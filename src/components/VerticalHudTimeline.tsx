@@ -6,7 +6,10 @@ import { createPortal } from 'react-dom';
 // Tiny icon set (no extra deps)
 const Icon = ({ kind }: { kind: TimelineItem['kind'] }) => {
   const s = { width: 18, height: 18, color: 'rgb(var(--accent))' } as const;
-  if (kind === 'edu')    return <svg {...s} viewBox="0 0 24 24" fill="none"><path d="m3 7 9-4 9 4-9 4-9-4Z" stroke="currentColor" strokeWidth="1.6"/><path d="M21 10v5" stroke="currentColor" strokeWidth="1.6"/></svg>;
+  if (kind === 'edu')    return <svg {...s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M22 10v6M2 10l10-5 10 5-10 5-10-5z"/>
+    <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+  </svg>;
   if (kind === 'cert')   return <svg {...s} viewBox="0 0 24 24" fill="none"><path d="M12 2l2.4 4.9 5.4.8-3.9 3.8.9 5.4L12 14.8 7.2 17l.9-5.4L4.2 7.7l5.4-.8L12 2Z" stroke="currentColor" strokeWidth="1.6"/></svg>;
   if (kind === 'future') return <svg {...s} viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8" stroke="currentColor" strokeWidth="1.6"/><path d="M12 6v6l4 2" stroke="currentColor" strokeWidth="1.6"/></svg>;
   // work / project
@@ -69,10 +72,26 @@ export default function VerticalHudTimeline({ items = [] }: Props) {
         }}
       />
       {/* Quick nav chips */}
-      <div className="relative mb-6 flex flex-wrap gap-2 pl-20">
+      <div className="relative mb-6 flex flex-wrap gap-3 pl-20">
         {grouped.map(([k]) => (
-          <a key={k} href={`#tl-${k}`} className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border text-sm" style={{ borderColor: cBorder, color: cText }}>
-            {KIND_LABEL[k]}
+          <a 
+            key={k} 
+            href={`#tl-${k}`} 
+            className={`inline-flex items-center gap-2 px-4 py-2 rounded-full border text-sm font-medium transition-all duration-200 hover:scale-105 ${
+              k === 'edu' ? 'bg-yellow-500/10 border-yellow-500/30 text-yellow-400 hover:bg-yellow-500/20' :
+              k === 'work' ? 'bg-blue-500/10 border-blue-500/30 text-blue-400 hover:bg-blue-500/20' :
+              k === 'cert' ? 'bg-green-500/10 border-green-500/30 text-green-400 hover:bg-green-500/20' :
+              k === 'project' ? 'bg-purple-500/10 border-purple-500/30 text-purple-400 hover:bg-purple-500/20' :
+              'bg-gray-500/10 border-gray-500/30 text-gray-400 hover:bg-gray-500/20'
+            }`}
+            style={{
+              backdropFilter: 'blur(4px)',
+              boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+            }}
+          >
+            <span className="relative z-10">
+              {KIND_LABEL[k]}
+            </span>
           </a>
         ))}
       </div>
