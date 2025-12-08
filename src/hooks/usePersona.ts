@@ -5,7 +5,7 @@ import { PERSONAS } from "../persona";
 export function usePersona(): [PersonaId, (p: PersonaId) => void] {
   const initial = (): PersonaId => {
     const h = typeof window !== "undefined" ? window.location.hash.slice(1) : "";
-    return PERSONAS.some(p => p.id === h) ? (h as PersonaId) : "game";
+    return PERSONAS.some(p => p.id === h) ? (h as PersonaId) : "sec";
   };
   const [p, setP] = useState<PersonaId>(initial);
 
